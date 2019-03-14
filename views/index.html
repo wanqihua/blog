@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title><%= title %></title>
+  <style>
+    .pStyle {
+      width: 100%;
+      word-break: normal;
+      display: block;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow: hidden;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<p class='pStyle'></p>
+<script>
+  setTimeout(() => {
+    const total = 1000;
+    const once = 2;
+    const loopCount = total / once;
+    let countOfRender = 0;
+    let ul = document.querySelector("p");
+    function add(){
+      // 优化性能，插入不会造成回流
+      const fragment = document.createDocumentFragment();
+      for (let i = 0; i < once; i++) {
+        const li = document.createElement("span");
+        li.innerText = Math.floor(Math.random() * total);
+        li.style.color = '#' + Math.floor(Math.random()*0xffffff).toString(16);
+        fragment.appendChild(li);
+      }
+      ul.appendChild(fragment);
+      countOfRender += 1;
+      loop();
+    }
+    function loop() {
+      if (countOfRender < loopCount) {
+        window.requestAnimationFrame(add);
+      }
+    }
+    loop();
+  }, 0);
+</script>
+</body>
+</html>

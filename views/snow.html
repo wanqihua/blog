@@ -10,14 +10,23 @@
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 1;
+        z-index: 0;
         pointer-events: none;
         background: rgba(22,46,120,1);
     }
 </style>
 <body>
 <canvas id='snowFall' class="backStyle"></canvas>
+<script src="./js/stats.js"></script>
 <script>
+
+
+    let stats = new Stats();
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.right = '0px';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild( stats.domElement );
 
     function preloadImg(srcArr){
         if(srcArr instanceof Array){
@@ -43,10 +52,10 @@
 
     let snowBox = function(){
         let canvasEl = document.getElementById("snowFall");
-        let    ctx = canvasEl.getContext('2d');
+        let ctx = canvasEl.getContext('2d');
         canvasEl.width = window.innerWidth;
         canvasEl.height = window.innerHeight;
-        let    linelist = []; // 雪的容器
+        let linelist = []; // 雪的容器
         let snow = function(){
             this.cacheCanvas = document.createElement("canvas");
             this.cacheCtx = this.cacheCanvas.getContext("2d");
@@ -106,14 +115,15 @@
             update:function(){
                 ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
                 let linelistLen = linelist.length;
-                for(var i = 0; i < linelistLen; i++){
+                for(let i = 0; i < linelistLen; i++){
                     linelist[i].fall();
                 }
             },
 
             loop:function(){
-                var _this = this;
+                let _this = this;
                 this.update();
+                stats.update();
                 RAF(function(){
                     _this.loop();
                 })

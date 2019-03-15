@@ -19,6 +19,12 @@
 <canvas id='snowFall' class="backStyle"></canvas>
 <script src="./js/stats.js"></script>
 <script>
+    let stats = new Stats();
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.right = '0px';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild( stats.domElement );
 
 
     let stats = new Stats();
@@ -59,10 +65,9 @@
         let snow = function(){
             this.cacheCanvas = document.createElement("canvas");
             this.cacheCtx = this.cacheCanvas.getContext("2d");
-            this.speedx = .9;          // 速度 X轴
             this.cacheCanvas.width = 10;
             this.cacheCanvas.height = 10;
-            this.speed = .8 + (Math.floor(Math.random() * 4)) / 8;              // 雪花下落速度
+            this.speed = 1.8 + (Math.floor(Math.random() * 4)) / 8;              // 雪花下落速度
             this.posx = Math.round(Math.random()*canvasEl.width);              // 雪花x坐标
             this.posy = Math.round(Math.random()*canvasEl.height);               // 雪花y坐标
             this.img = `./img/snow_(${Math.ceil(Math.random()*9)}).png`;       // img
@@ -143,10 +148,8 @@
     }();
 
     window.onload = function(){
-            snowBox.start()
+        snowBox.start()
     }
-
-
 </script>
 </body>
 </html>

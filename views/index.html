@@ -1,52 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title><%= title %></title>
+  <title>雪花效果 - by ghostwu</title>
+  <!-- <script src="lib.js"></script> -->
   <style>
-    .pStyle {
-      width: 100%;
-      word-break: normal;
-      display: block;
-      white-space: pre-wrap;
-      word-wrap: break-word;
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
       overflow: hidden;
-      text-align: center;
     }
   </style>
 </head>
+
 <body>
-<p class='pStyle'></p>
 <script>
-  setTimeout(() => {
-    const total = 1000;
-    const once = 2;
-    const loopCount = total / once;
-    let countOfRender = 0;
-    let ul = document.querySelector("p");
-    function add(){
-      // 优化性能，插入不会造成回流
-      const fragment = document.createDocumentFragment();
-      for (let i = 0; i < once; i++) {
-        const li = document.createElement("span");
-        li.innerText = Math.floor(Math.random() * total);
-        li.style.color = '#' + Math.floor(Math.random()*0xffffff).toString(16);
-        fragment.appendChild(li);
-      }
-      ul.appendChild(fragment);
-      countOfRender += 1;
-      loop();
+    window.onload = function () {
+        var Canvas = function (w, h) {
+            this.width = w;
+            this.height = h;
+        }
+        Canvas.prototype = {
+            init: function () {
+                var oC = document.createElement("canvas");
+                oC.setAttribute('width', this.width);
+                oC.setAttribute('height', this.height);
+                oC.setAttribute('id', 'canvas');
+                oC.style.backgroundColor = '#000';
+                document.body.appendChild(oC);
+            }
+        }
+        var curWinWidth = window.innerWidth,
+            curWinHeight = window.innerHeight;
+        var oCanvas = new Canvas(curWinWidth, curWinHeight);
+        oCanvas.init();
+
+        var oC = document.querySelector('#canvas');
+        var width = oC.width, height = oC.height, oGc = oC.getContext('2d');
+
+        function random(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+        var Snow = function () {
+
+        }
+        Snow.prototype = {
+            init: function () {
+                this.x = random(0, width);
+                this.y = 0;
+                this.r = random(1, 5);
+                this.vy = random(3, 5);
+            },
+            draw: function (cxt) {
+                cxt.beginPath();
+                cxt.fillStyle = 'white';
+                cxt.arc(this.x, this.y + this.r, this.r, 0, Math.PI * 2, false);
+                cxt.fill();
+                cxt.closePath();
+                this.update(cxt);
+            },
+            update: function (cxt) {
+                if (this.y < height - this.r) {
+                    this.y += this.vy;
+                } else {
+                    this.init();
+                }
+            }
+        }
+
+        var snow = [];
+        for (var i = 0; i < 500; i++) {
+            setTimeout(function () {
+                var oSnow = new Snow();
+                oSnow.init();
+                snow.push(oSnow);
+            }, 10 * i);
+        }
+
+        (function move() {
+            oGc.clearRect(0, 0, width, height);
+            for (var i = 0; i < snow.length; i++) {
+                snow[i].draw(oGc);
+            }
+            requestAnimationFrame(move);
+        })();
     }
-    function loop() {
-      if (countOfRender < loopCount) {
-        window.requestAnimationFrame(add);
-      }
-    }
-    loop();
-  }, 0);
 </script>
 </body>
-</html>

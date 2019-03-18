@@ -60,12 +60,12 @@
             _this.cacheCtx = _this.cacheCanvas.getContext("2d");
             _this.cacheCanvas.width = 10;
             _this.cacheCanvas.height = 10;
-            _this.speed = 1 + (Math.floor(Math.random() * 4)) / 8;              // 雪花下落速度
+            _this.speed = _this.getInt(1 + (Math.floor(Math.random() * 4)) / 8);              // 雪花下落速度
             _this.posx = Math.round(Math.random() * canvasEl.width);              // 雪花x坐标
             _this.posy = Math.round(Math.random() * canvasEl.height);               // 雪花y坐标
             _this.img = `./img/snow_(${Math.ceil(Math.random() * 9)}).png`;       // img
-            _this.w = 5 + Math.random() * 6;
-            _this.h = 5 + Math.random() * 6;
+            _this.w = _this.getInt(5 + Math.random() * 6);
+            _this.h = _this.getInt(5 + Math.random() * 6);
             _this.cacheSnow();
         };
 
@@ -81,25 +81,27 @@
             fall: function () {
                 let _this = this;
                 if (_this.posy > canvasEl.height + 5) {
-                    _this.posy = 0 - _this.h;
-                    _this.posx = canvasEl.width * Math.random();
+                    _this.posy = _this.getInt(0 - _this.h);
+                    _this.posx = _this.getInt(canvasEl.width * Math.random());
                 }
                 if (_this.posx > canvasEl.width + 5) {
-                    _this.posx = 0 - _this.w;
-                    _this.posy = canvasEl.height * Math.random();
+                    _this.posx = _this.getInt(0 - _this.w);
+                    _this.posy = _this.getInt(canvasEl.height * Math.random());
                 }
-
                 // 如果 雪花 y坐标 大于 可视区域的高度，设置die属性为true
                 if (_this.posy <= canvasEl.height || _this.posx <= canvasEl.width) {
-                    _this.posy = _this.posy + _this.speed;
-                    _this.posx = _this.posx + _this.speed * .5;
+                    _this.posy = _this.getInt(_this.posy + _this.speed);
+                    _this.posx = _this.getInt(_this.posx + _this.speed * .5);
                 }
-
                 _this.paint();
             },
-
             paint: function () {
                 ctx.drawImage(this.cacheCanvas, this.posx, this.posy)
+            },
+            getInt: function(num){
+                let rounded;
+                rounded = (0.5 + num) | 0;
+                return rounded;
             }
         };
 
@@ -120,17 +122,17 @@
                 })();
             }
         };
-
         return control;
     }();
 
     window.onload = function(){
-        snowBox.start(100)
+        snowBox.start(200)
     };
 
     window.requestAnimationFrame = (function(){
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {window.setTimeout(callback, 1000 / 60); };
     })();
+
 </script>
 </body>
 </html>

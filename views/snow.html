@@ -17,22 +17,14 @@
 </style>
 <body>
 <canvas id='snowFall' class="backStyle"></canvas>
-<script src="./js/stats.js"></script>
+<!--<script src="./js/stats.js"></script>-->
 <script>
-    let stats = new Stats();
-    stats.setMode(0);
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.right = '0px';
-    stats.domElement.style.top = '0px';
-    document.body.appendChild( stats.domElement );
-
-
-    let stats = new Stats();
-    stats.setMode(0);
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.right = '0px';
-    stats.domElement.style.top = '0px';
-    document.body.appendChild( stats.domElement );
+    // let stats = new Stats();
+    // stats.setMode(0);
+    // stats.domElement.style.position = 'absolute';
+    // stats.domElement.style.right = '0px';
+    // stats.domElement.style.top = '0px';
+    // document.body.appendChild( stats.domElement );
 
     function preloadImg(srcArr){
         if(srcArr instanceof Array){
@@ -41,7 +33,7 @@
                 oImg.src = srcArr[i];
             }
         }
-    };
+    }
 
     preloadImg([
       './img/snow_(1).png',
@@ -56,100 +48,89 @@
       './img/snow_(10).png'
     ]);
 
-    let snowBox = function(){
+    let snowBox = function () {
         let canvasEl = document.getElementById("snowFall");
         let ctx = canvasEl.getContext('2d');
         canvasEl.width = window.innerWidth;
         canvasEl.height = window.innerHeight;
-        let linelist = []; // 雪的容器
-        let snow = function(){
-            this.cacheCanvas = document.createElement("canvas");
-            this.cacheCtx = this.cacheCanvas.getContext("2d");
-            this.cacheCanvas.width = 10;
-            this.cacheCanvas.height = 10;
-            this.speed = 1.8 + (Math.floor(Math.random() * 4)) / 8;              // 雪花下落速度
-            this.posx = Math.round(Math.random()*canvasEl.width);              // 雪花x坐标
-            this.posy = Math.round(Math.random()*canvasEl.height);               // 雪花y坐标
-            this.img = `./img/snow_(${Math.ceil(Math.random()*9)}).png`;       // img
-            this.w = 4 + Math.random()*6;
-            this.h = 4 + Math.random()*6;
-            this.cacheSnow();
-        }
+        let lineList = []; // 雪的容器
+        let snow = function () {
+            let _this = this;
+            _this.cacheCanvas = document.createElement("canvas");
+            _this.cacheCtx = _this.cacheCanvas.getContext("2d");
+            _this.cacheCanvas.width = 10;
+            _this.cacheCanvas.height = 10;
+            _this.speed = 1 + (Math.floor(Math.random() * 4)) / 8;              // 雪花下落速度
+            _this.posx = Math.round(Math.random() * canvasEl.width);              // 雪花x坐标
+            _this.posy = Math.round(Math.random() * canvasEl.height);               // 雪花y坐标
+            _this.img = `./img/snow_(${Math.ceil(Math.random() * 9)}).png`;       // img
+            _this.w = 5 + Math.random() * 6;
+            _this.h = 5 + Math.random() * 6;
+            _this.cacheSnow();
+        };
+
         snow.prototype = {
-            cacheSnow: function(){
-                this.cacheCtx.save();
+            cacheSnow: function () {
+                let _this = this;
+                _this.cacheCtx.save();
                 let img = new Image();   // 创建img元素
-                img.src = this.img;
-                this.cacheCtx.drawImage(img, 0, 0, this.w, this.h)
-                this.cacheCtx.restore();
+                img.src = _this.img;
+                _this.cacheCtx.drawImage(img, 0, 0, _this.w, _this.h);
+                _this.cacheCtx.restore();
             },
-            fall: function(){
-                if(this.posy > canvasEl.height + 5){
-                    this.posy = 0 - this.h;
-                    this.posx = canvasEl.width * Math.random();
+            fall: function () {
+                let _this = this;
+                if (_this.posy > canvasEl.height + 5) {
+                    _this.posy = 0 - _this.h;
+                    _this.posx = canvasEl.width * Math.random();
                 }
-                if(this.posx > canvasEl.width + 5){
-                    this.posx = 0 - this.w;
-                    this.posy = canvasEl.height * Math.random();
+                if (_this.posx > canvasEl.width + 5) {
+                    _this.posx = 0 - _this.w;
+                    _this.posy = canvasEl.height * Math.random();
                 }
 
                 // 如果 雪花 y坐标 大于 可视区域的高度，设置die属性为true
-                if (this.posy <= canvasEl.height || this.posx <= canvasEl.width) {
-                    this.posy = this.posy + this.speed;
-                    this.posx = this.posx + this.speed;
+                if (_this.posy <= canvasEl.height || _this.posx <= canvasEl.width) {
+                    _this.posy = _this.posy + _this.speed;
+                    _this.posx = _this.posx + _this.speed * .5;
                 }
 
+                _this.paint();
+            },
+
+            paint: function () {
                 ctx.drawImage(this.cacheCanvas, this.posx, this.posy)
-            },
-            paint: function(){
-                ctx.drawImage(this.cacheCanvas, this.posx, this.posy)
-            }
-        }
-
-
-        let control = {
-            init: function(){
-                let tempArr = [];
-                for (let i = 0; i < 200; i++){
-                    let s = new snow();
-                    tempArr.push(s);
-                }
-                linelist = tempArr;
-            },
-
-            update:function(){
-                ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-                let linelistLen = linelist.length;
-                for(let i = 0; i < linelistLen; i++){
-                    linelist[i].fall();
-                }
-            },
-
-            loop:function(){
-                let _this = this;
-                this.update();
-                stats.update();
-                RAF(function(){
-                    _this.loop();
-                })
-            },
-
-            start:function(){
-                this.init();
-                this.loop();
             }
         };
 
-        window.RAF = (function(){
-            return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {window.setTimeout(callback, 1000 / 60); };
-        })();
+        let control;
+        control = {
+            start: function (num) {
+                for (let i = 0; i < num; i++) {
+                    let s = new snow();
+                    lineList.push(s);
+                }
+                (function loop() {
+                    ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+                    for (let i = 0; i < num; i++) {
+                        lineList[i].fall();
+                    }
+                    // stats.update();
+                    requestAnimationFrame(loop)
+                })();
+            }
+        };
 
         return control;
     }();
 
     window.onload = function(){
-        snowBox.start()
-    }
+        snowBox.start(100)
+    };
+
+    window.requestAnimationFrame = (function(){
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {window.setTimeout(callback, 1000 / 60); };
+    })();
 </script>
 </body>
 </html>

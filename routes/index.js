@@ -1,13 +1,16 @@
 const router = require('koa-router')()
 
-router.get('/', async (ctx, next) => {
+router.get('/snow', async (ctx, next) => {
   await ctx.render('snow', {
   })
-})
+});
 
-router.get('/snow', async (ctx, next) => {
-  await ctx.render('index', {
-  })
-})
+router.get('/languageTest', async (ctx, next) => {
+    await ctx.render('languageTest', {
+        language: global.language,
+        lang: 'en'
+    })
+});
 
-module.exports = router
+module.exports = router;
+

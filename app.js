@@ -7,6 +7,7 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
 const index = require('./routes/index')
+const loadLang = require(`./languageRead`)
 
 // error handler
 onerror(app)
@@ -18,7 +19,6 @@ app.use(bodyparser({
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
-
 
 const ejs = require('ejs');
 app.use(views(__dirname + '/views', {
@@ -32,6 +32,9 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
+
+// 初始化多语言
+loadLang();
 
 // routes
 app.use(index.routes(), index.allowedMethods())

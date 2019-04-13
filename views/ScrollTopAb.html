@@ -45,7 +45,7 @@
         }
         .color_box {
             width: 100%;
-            height: 1rem;
+            height: 8rem;
             background: #333;
         }
         .color_box_two {
@@ -65,6 +65,7 @@
             background: #999;
             color: #fff;
             font-size: .16rem;
+            /*transition: all 10s ease-in-out;*/
         }
         .isFixed{
             position:fixed;
@@ -112,11 +113,12 @@
         </div>
     </div>
     <script src="./js/zepto.min.js"></script>
+    <script src="https://cdn.bootcss.com/lodash.js/4.17.12-pre/lodash.js"></script>
     <script>
         var app = new Vue({
             el: '#app',
             data: {
-                number: 0,
+                number: 3,
                 dateTabs:['第一种', '第二种', '第三种', '第四种'],
                 titleFixed: ''
             },
@@ -126,25 +128,23 @@
                     if(self.number === 1){
                         window.addEventListener('scroll', self.handleScrollOne);
                         window.removeEventListener('scroll', self.handleScrollTwo);
-                        window.removeEventListener('scroll', self.handleScrollThree);
                     }else if(self.number === 2){
-                        window.addEventListener('scroll', self.handleScrollTwo);
+                        window.addEventListener('scroll', _.throttle(self.handleScrollTwo, 50));
                         window.removeEventListener('scroll', self.handleScrollOne);
-                        window.removeEventListener('scroll', self.handleScrollThree);
                     }else if(self.number === 3){
-                        window.addEventListener('scroll', self.handleScrollThree);
                         window.removeEventListener('scroll', self.handleScrollOne);
                         window.removeEventListener('scroll', self.handleScrollTwo);
+                        self.IntersectionObserverFun()
                     }else{
                         window.removeEventListener('scroll', self.handleScrollOne);
                         window.removeEventListener('scroll', self.handleScrollTwo);
-                        window.removeEventListener('scroll', self.handleScrollThree);
                     }
-
                 }
             },
             mounted(){
-
+                if( this.number === 3 ){
+                    this.IntersectionObserverFun()
+                }
             },
             methods: {
                 change: function (index) {
@@ -162,10 +162,23 @@
                     let offsetTop = self.getOffset(self.$refs.pride_tab_fixed);
                     self.titleFixed = scrollTop > offsetTop;
                 },
-                handleScrollThree: function() {
+                IntersectionObserverFun: function() {
                     let self = this;
-                    let offsetTop = self.$refs.pride_tab_fixed.getBoundingClientRect().top;
-                    self.titleFixed = offsetTop < 0;
+                    let ele = self.$refs.pride_tab_fixed;
+                    if( !IntersectionObserver ){
+                        let observer = new IntersectionObserver(function(){
+                            let offsetTop = ele.getBoundingClientRect().top;
+                            self.titleFixed = offsetTop < 0;
+                        }, {
+                            threshold: [1]
+                        });
+                        observer.observe(document.getElementsByClassName('title_box')[0]);
+                    } else {
+                        window.addEventListener('scroll', _.throttle(function(){
+                            let offsetTop = ele.getBoundingClientRect().top;
+                            self.titleFixed = offsetTop < 0;
+                        }, 50));
+                    }
                 },
                 getOffset: function(obj,direction){
                     let offsetL = 0;

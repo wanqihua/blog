@@ -28,8 +28,8 @@ router.get('/ScrollTopAb', async (ctx, next) => {
 
 
 
-router.get('/SpecialAPI', async (ctx, next) => {
-    await ctx.render('SpecialAPI', {
+router.get('/webAPI', async (ctx, next) => {
+    await ctx.render('webAPI', {
     })
 });
 

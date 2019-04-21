@@ -57,6 +57,9 @@
             vibrateInfo: '点击震动',
             onLineInfo: 'online',
             fullScreenInfo: "打开全屏",
+            infoNum: 1,
+            timer: null
+
         },
         mounted(){
             let self = this;
@@ -64,6 +67,11 @@
             self.getBatteryInfo();
             window.addEventListener('online',  self.updateOnlineStatus, true);
             window.addEventListener('offline', self.updateOnlineStatus, true);
+            window.addEventListener('blur',  self.doFlashTitle, true);
+            window.addEventListener('focus', function () {
+                clearInterval(self.timer);
+                document.title = '微信网页版';
+            }, true);
         },
         methods: {
             screenOrientation: function(){
@@ -78,18 +86,11 @@
                 if(navigator.getBattery){
                     navigator.getBattery().then(function(battery) {
                         // 判断是否在充电
-                        if( battery.charging ){
-                            // 在充电
-                            self.batteryInfo = `在充电 : 剩余 ${battery.level * 100}%`
-                        }else{
-                            // 没充电
-                            self.batteryInfo = `没充电 : 剩余 ${battery.level * 100}%`
-                        }
+                        self.batteryInfo = battery.charging ? `在充电 : 剩余 ${battery.level * 100}%` : `没充电 : 剩余 ${battery.level * 100}%`;
                         // 电池充电状态改变事件
                         battery.addEventListener('chargingchange', function(){
-                            consloe.log("充电状态："+ (battery.charging ? "正在充电" : "未充电"));
+                            self.batteryInfo = battery.charging ? `在充电 : 剩余 ${battery.level * 100}%` : `没充电 : 剩余 ${battery.level * 100}%`;
                         });
-                        console.log(battery)
                     });
                 }else{
                     self.batteryInfo = '不支持电池状态接口';
@@ -138,7 +139,18 @@
                 } else {
                     self.fullScreenInfo = '浏览器当前不能全屏';
                 }
-            }
+            },
+            doFlashTitle: function(){
+                var self = this;
+                self.timer = setInterval( () => {
+                    if (!self.flashFlag) {
+                        document.title = "微信网页版";
+                    } else {
+                        document.title = `微信（${self.infoNum}）`;
+                    }
+                    self.flashFlag = ! self.flashFlag
+                }, 500)
+            },
         }
     });
 </script>

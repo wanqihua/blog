@@ -11,7 +11,8 @@
 ### Vue 相关：
 
 [1. Vuex 注入 Vue 生命周期的过程](https://github.com/wanqihua/blog/issues/13)
-[2. 学习 Vue 源码的必要知识储备](https://github.com/wanqihua/blog/issues/15)
+
+[2. 学习 Vue 源码的必要知识储备](https://github.com/wanqihua/blog/issues/15)  
 [3. Vue 响应式原理其实很好懂](https://github.com/wanqihua/blog/issues/16)
 
 ### JavaScript 相关（应用）：

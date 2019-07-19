@@ -39,6 +39,7 @@
 
 1. [进阶必备的网络基础](https://github.com/wanqihua/blog/issues/6)
 2. [如何向老板解释反向代理](https://github.com/wanqihua/blog/issues/14)
+3. [CDN 带来这些性能优化](https://github.com/wanqihua/blog/issues/25)
 
 ### 浏览器相关：
 
@@ -56,7 +57,7 @@
 
 ### 其他
 
-1. [全网最优惠的极客教程](https://github.com/wanqihua/blog/issues/24)
+1. [最优惠的极客](https://github.com/wanqihua/blog/issues/24)
 
 
 ## 最后

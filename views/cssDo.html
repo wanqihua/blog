@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,minimum=1.0,maximum=1.0,user-scalable=no"/>
+  <title>css do</title>
+  <style>
+    /* 去除浏览器默认的样式 */
+    body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form,
+    fieldset, input, textarea, p, blockquote, th, td {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* 首字母大写 */
+    .capitalizeFirst-box {
+        padding: .4em;
+    }
+    .capitalizeFirst-box > div {
+        font-size: 14px;
+        color: #333;
+        line-height: 2em;
+    }
+    .sub-title + .capitalizeFirst-js,
+    .sub-title + .capitalizeFirst-css {
+        padding-left: 2em;
+    }
+    .capitalizeFirst-css {
+        text-transform: capitalize;
+    }
+
+    .single-check-box {
+        margin-top: 40px;
+        display: flex;
+    }
+
+    .single-check {
+        position: relative;
+        margin-left: 15px;
+    }
+
+    .input {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .colors {
+        font-size: 14px;
+        height: 2em;
+        line-height: 2em;
+        border-radius: 1em;
+        padding: 0 1em;
+        border: 1px solid #666;
+    }
+
+    .input:checked + .colors {
+        border-color: #e63838;
+        color: #e63838;
+    }
+
+
+
+    .accordant {
+        display: table;
+        border-spacing: 20px;  
+    }
+    
+    .accordant > div {
+        width: 300px;
+        padding: 5px;
+        background-color: #999;
+        display: table-cell;
+        border-radius: 5px;    /*这里设置圆角就正常了*/
+
+    }
+
+
+    .form-css {
+        text-align: center;
+    }
+
+    input[type="text"]:invalid ~ input[type="submit"] {
+        display: none
+    }
+
+
+  </style>
+</head>
+<body>
+    <div class="capitalizeFirst-box">
+        <p class="sub-title">使用 JS</p>
+        <div class="capitalizeFirst-js">this package is no longer maintained</div>
+        <p class="sub-title">使用 CSS</p>
+        <div class="capitalizeFirst-css">this package is no longer maintained</div>
+    </div>
+
+    <div class="single-check-box">
+        <div class="single-check">
+            <input class="input" type="radio" name="colors" value="1">
+            <div class="colors">天空之境</div> 
+        </div>
+        <div class="single-check">
+            <input class="input" type="radio" name="colors" value="2">
+            <div class="colors">亮黑色</div> 
+        </div>
+        <div class="single-check">
+            <input class="input" type="radio" name="colors" value="3">
+            <div class="colors">极光色</div> 
+        </div>
+    </div>
+
+    <div class="accordant">
+        <div>测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容</div>
+        <div>测试内容测试内容测试内容测试内容</div>
+    </div>
+    <div class="form-css">
+        <input type="text" name="tel" placeholder="输入手机号码" pattern="^1[3456789]\d{9}$" required><br>
+        <input type="text" name="smscode" placeholder="输入验证码" pattern="\d{4}" required><br>
+        <input type="submit" ></input>
+    </div>
+    
+  
+    
+</body>
+<script>
+    window.onload = function(){
+        capitalize()
+    }
+    function capitalize(){
+        let capitalizeFirstJsDomTest = document.getElementsByClassName('capitalizeFirst-js')[0].innerHTML;
+        document.getElementsByClassName('capitalizeFirst-js')[0].innerHTML = capitalizeFirst(capitalizeFirstJsDomTest)
+    }
+    function capitalizeFirst( str ) {
+        let result = '';
+        result = str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
+        return result
+    }  
+</script>
+</html>

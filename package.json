@@ -12,7 +12,7 @@
     "debug": "^2.6.3",
     "ejs": "^2.6.1",
     "koa": "^2.2.0",
-    "koa-bodyparser": "^3.2.0",
+    "koa-bodyparser": "^4.3.0",
     "koa-convert": "^1.2.0",
     "koa-json": "^2.0.2",
     "koa-logger": "^2.0.1",
